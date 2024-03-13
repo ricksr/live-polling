@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const Teacher = () => {
+const TeacherPolling = () => {
   const [counter, setCounter] = useState(5000)
   const [ques, setQues] = useState("");
   const [a, setA] = useState("");
@@ -11,15 +11,23 @@ const Teacher = () => {
   const [c, setC] = useState("");
 
   const router = useRouter();
-  let opt_a: any = localStorage.getItem("opt_a");
-  let opt_b: any = localStorage.getItem("opt_b");
-  let opt_c: any = localStorage.getItem("opt_c");
-  let all = Number(opt_a) + Number(opt_b) + Number(opt_c);
 
+  const [opt_a, setOpt_a] = useState(0);
+  const [opt_b, setOpt_b] = useState(0);
+  const [opt_c, setOpt_c] = useState(0);
+  const [all, setAll] = useState(0);
+
+  const setFromLocal = () => {
+    setOpt_a(Number(localStorage.getItem("opt_a"))) 
+    setOpt_b(Number(localStorage.getItem("opt_b"))) 
+    setOpt_c(Number(localStorage.getItem("opt_c"))) 
+    setAll(Number(opt_a) + Number(opt_b) + Number(opt_c))
+  }
+  
   const handleAnotherQuestion = () => {
     router.push("/teacher");
   };
-
+  
   const fetchLatestQues = async () => {
     var raw = "";
 
@@ -40,6 +48,7 @@ const Teacher = () => {
   };
 
   useEffect(() => {
+    setFromLocal();
     fetchLatestQues();
     counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
   }, [counter]);
@@ -200,4 +209,4 @@ const Teacher = () => {
   );
 };
 
-export default Teacher;
+export default TeacherPolling;
