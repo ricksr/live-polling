@@ -15,6 +15,8 @@ const Student = () => {
   const [counter, setCounter] = React.useState(60);
 
   const handleSubmit = () => {
+    let opt_cnt: any = Number(localStorage.getItem(ans)) || 0;
+    localStorage.setItem(ans, 1+opt_cnt)
     if (ans == correctAns) alert("Correct answer");
     router.push("/student/polling");
   };
@@ -48,11 +50,12 @@ const Student = () => {
     setCorrectAns(resp?.data?.correct_opt);
   };
 
+  // useEffect(() => {
+    
+  // }, []);
   useEffect(() => {
     fetchLatestQues();
     fetchAnswer();
-  }, []);
-  useEffect(() => {
     if (counter == 0) {
       router.push("/student/polling");
     }

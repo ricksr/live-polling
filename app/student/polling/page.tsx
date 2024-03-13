@@ -1,14 +1,48 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Teacher = () => {
+  const [ques, setQues] = useState("");
+  const [a, setA] = useState("");
+  const [b, setB] = useState("");
+  const [c, setC] = useState("");
+  const [counter, setCounter] = React.useState(5000);
+
   const router = useRouter();
+  let opt_a: any = localStorage.getItem("opt_a");
+  let opt_b: any = localStorage.getItem("opt_b");
+  let opt_c: any = localStorage.getItem("opt_c");
+  let all = Number(opt_a) + Number(opt_b) + Number(opt_c);
 
   const handleAnotherQuestion = () => {
     router.push("/teacher");
   };
+
+  const fetchLatestQues = async () => {
+    var raw = "";
+
+    let resp: any = await fetch(
+      "https://social-sturgeon-yearly.ngrok-free.app/api/show-latest-question",
+      {
+        method: "POST",
+        body: raw,
+        redirect: "follow",
+      }
+    );
+    resp = await resp.json();
+    console.log("API resp", resp?.data);
+    setQues(resp?.data?.latestQuestion);
+    setA(resp?.data?.opt_a);
+    setB(resp?.data?.opt_b);
+    setC(resp?.data?.opt_c);
+  };
+
+  useEffect(() => {
+    fetchLatestQues();
+    counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+  }, [counter]);
 
   return (
     <div
@@ -46,6 +80,7 @@ const Teacher = () => {
           <div>
             <h4>Polling Results</h4>
           </div>
+          <i>Q. {ques}</i>
           <div
             style={{
               display: "flex",
@@ -53,6 +88,7 @@ const Teacher = () => {
               justifyContent: "space-evenly",
             }}
           >
+            
             <div
               style={{
                 background: "white",
@@ -63,7 +99,7 @@ const Teacher = () => {
               }}
             >
               {" "}
-              15
+              {a}
             </div>
             <div
               style={{
@@ -73,7 +109,7 @@ const Teacher = () => {
                 border: "1px solid",
               }}
             >
-              50%{" "}
+              {((opt_a / all) * 100).toFixed(2)}{" "}
             </div>
           </div>
           <div
@@ -93,7 +129,7 @@ const Teacher = () => {
               }}
             >
               {" "}
-              20
+              {b}
             </div>
             <div
               style={{
@@ -103,7 +139,7 @@ const Teacher = () => {
                 border: "1px solid",
               }}
             >
-              50%{" "}
+              {((opt_b / all) * 100).toFixed(2)}{" "}
             </div>
           </div>
           <div
@@ -123,7 +159,7 @@ const Teacher = () => {
               }}
             >
               {" "}
-              30
+              {c}
             </div>
             <div
               style={{
@@ -133,7 +169,7 @@ const Teacher = () => {
                 border: "1px solid",
               }}
             >
-              50%{" "}
+              {((opt_c / all) * 100).toFixed(2)}{" "}
             </div>
           </div>
         </div>

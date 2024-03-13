@@ -44,6 +44,7 @@ const Teacher = () => {
       redirect: "follow",
     });
     console.log("api resp ", a);
+    localStorage.clear();
     router.push("/teacher/polling");
   };
 
