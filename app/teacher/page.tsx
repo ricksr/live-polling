@@ -37,7 +37,7 @@ const Teacher = () => {
       },
     });
 
-    let a = await fetch("http://localhost:3000/api/submit-question", {
+    let a = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/submit-question", {
       method: "POST",
       headers: myHeaders,
       body: raw,

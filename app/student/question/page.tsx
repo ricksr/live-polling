@@ -10,14 +10,19 @@ const Student = () => {
   const [b, setB] = useState("");
   const [c, setC] = useState("");
 
+  const [ans, setAns] = useState("");
+  const [correctAns, setCorrectAns] = useState("");
+  const [counter, setCounter] = React.useState(60);
+
   const handleSubmit = () => {
+    if (ans == correctAns) alert("Correct answer");
     router.push("/student/polling");
   };
 
   const fetchLatestQues = async () => {
     var raw = "";
 
-    let resp = await fetch("http://localhost:3000/api/show-latest-question", {
+    let resp = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/show-latest-question", {
       method: "POST",
       body: raw,
       redirect: "follow",
@@ -29,9 +34,30 @@ const Student = () => {
     setB(resp?.data?.opt_b);
     setC(resp?.data?.opt_c);
   };
+
+  const fetchAnswer = async () => {
+    var raw = "";
+
+    let resp = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/show-answer", {
+      method: "POST",
+      body: raw,
+      redirect: "follow",
+    });
+    resp = await resp.json();
+    console.log("API resp", resp?.data);
+    setCorrectAns(resp?.data?.correct_opt);
+  };
+
   useEffect(() => {
     fetchLatestQues();
+    fetchAnswer();
   }, []);
+  useEffect(() => {
+    if (counter == 0) {
+      router.push("/student/polling");
+    }
+    counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+  }, [counter]);
 
   return (
     <div
@@ -56,6 +82,9 @@ const Student = () => {
           marginLeft: "22.5vw",
         }}
       >
+        <h2>{counter}</h2>
+        <br />
+        <br />
         <div
           style={{
             display: "flex",
@@ -67,13 +96,13 @@ const Student = () => {
             <h3>Q. {ques}</h3>{" "}
           </span>
           <div style={{ padding: "10px" }}>
-            {a} <button>-</button>
+            {a} <button onClick={() => setAns("opt_a")}>-</button>
           </div>
           <div style={{ padding: "10px" }}>
-            {b} <button>-</button>
+            {b} <button onClick={() => setAns("opt_b")}>-</button>
           </div>
           <div style={{ padding: "10px" }}>
-            {c} <button>-</button>
+            {c} <button onClick={() => setAns("opt_c")}>-</button>
           </div>
         </div>
         <div style={{ margin: "20px" }}>
