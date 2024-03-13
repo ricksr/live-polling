@@ -22,7 +22,7 @@ const Student = () => {
   const fetchLatestQues = async () => {
     var raw = "";
 
-    let resp = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/show-latest-question", {
+    let resp: any = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/show-latest-question", {
       method: "POST",
       body: raw,
       redirect: "follow",
@@ -38,7 +38,7 @@ const Student = () => {
   const fetchAnswer = async () => {
     var raw = "";
 
-    let resp = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/show-answer", {
+    let resp: any = await fetch("https://social-sturgeon-yearly.ngrok-free.app/api/show-answer", {
       method: "POST",
       body: raw,
       redirect: "follow",
